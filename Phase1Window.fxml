@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+
+<Pane snapToPixel="false" styleClass="SecondWindowPane" stylesheets="@style.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bankSim.BankGUI">
+   <children>
+      <ImageView fitHeight="421.0" fitWidth="905.0" pickOnBounds="true" preserveRatio="true">
+         <viewport>
+            <Rectangle2D />
+         </viewport>
+         <image>
+            <Image url="@img/GUI2.png" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="2.0" layoutY="2.0" prefHeight="402.0" prefWidth="899.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="897.111083984375" minWidth="10.0" prefWidth="607.3333129882812" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="442.7777404785156" minWidth="1.888916015625" prefWidth="291.66668701171875" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="126.888916015625" minHeight="0.0" prefHeight="23.666666984558105" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="216.22220865885416" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="346.0" minHeight="10.0" prefHeight="46.66666666666666" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="111.33334350585938" minHeight="10.0" prefHeight="61.333333333333314" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="68.0" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="3">
+               <children>
+                  <Rectangle fx:id="atmOut" arcHeight="5.0" arcWidth="5.0" height="61.0" onMouseEntered="#atmOutInfo" stroke="BLACK" strokeType="INSIDE" width="61.0">
+                     <HBox.margin>
+                        <Insets left="255.0" />
+                     </HBox.margin>
+                     <fill>
+                        <LinearGradient endX="1.0" startY="1.0">
+                           <stops>
+                              <Stop>
+                                 <color>
+                                    <Color red="0.42278537154197693" green="0.4808082580566406" blue="0.5350877046585083" />
+                                 </color>
+                              </Stop>
+                              <Stop offset="1.0">
+                                 <color>
+                                    <Color red="1.0" green="1.0" blue="1.0" />
+                                 </color>
+                              </Stop>
+                           </stops>
+                        </LinearGradient>
+                     </fill>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+               </children>
+            </HBox>
+            <HBox prefHeight="32.0" prefWidth="942.0">
+               <children>
+                  <ImageView fx:id="atm1" fitHeight="32.0" fitWidth="36.0" onMouseEntered="#atm1Info" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                     <image>
+                        <Image url="@img/ATM.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="75.0" top="5.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="atm2" fitHeight="32.0" fitWidth="36.0" onMouseEntered="#atm2Info" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/ATM.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="100.0" top="5.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="atm3" fitHeight="32.0" fitWidth="36.0" onMouseEntered="#atm3Info" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/ATM.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="150.0" top="5.0" />
+                     </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+                  <ImageView fx:id="atm4" fitHeight="32.0" fitWidth="36.0" onMouseEntered="#atm4Info" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                     <image>
+                        <Image url="@img/ATM.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="110.0" top="5.0" />
+                     </HBox.margin>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="2">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="38.0" opacity="0.29" stroke="BLACK" strokeType="INSIDE" width="62.0">
+                     <HBox.margin>
+                        <Insets left="255.0" />
+                     </HBox.margin>
+                  </Rectangle>
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <Circle fx:id="thief" layoutX="658.0" layoutY="24.0" onMouseEntered="#thiefInfo" radius="12.0" stroke="BLACK" strokeType="INSIDE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <fill>
+            <LinearGradient cycleMethod="REPEAT" endX="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+      <Circle fx:id="client" fill="#1f93ff" layoutX="22.0" layoutY="383.0" onMouseEntered="#clientInfo" radius="12.0" stroke="BLACK" strokeType="INSIDE">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Circle>
+   </children>
+</Pane>
