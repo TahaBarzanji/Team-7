@@ -1,176 +1,221 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
-/**
- * `ATMSimulation` class simulates an ATM machine with transaction functionalities and a client queue.
-
- * This class allows clients to perform withdrawal, deposit, and check balance transactions using the ATM.
- * It also supports a client queue where clients can wait for their turn to use the ATM.
- * Additionally, it provides a method to clear the queue when a VIP person arrives to use the ATM.
- */
 public class ATM {
 
-    // Flag to indicate whether the ATM is available or on hold
-    private boolean isAvailable;
+    private boolean[] isAvailable;
+    private List<List<Client>> atmQueues;
 
-    // Queue to hold the clients waiting for their turn at the ATM
-    private Queue<Client> clientQueue;
-
-    /**
-     * `Client` class represents a client with an account number and balance.
-     */
+    // Inner class representing a client
     private static class Client {
         private int accountNumber;
         private double balance;
 
-        /**
-         * Constructor to initialize the client with an account number and balance.
-         *
-         * @param accountNumber The account number of the client.
-         * @param balance The balance of the client's account.
-         */
         public Client(int accountNumber, double balance) {
             this.accountNumber = accountNumber;
             this.balance = balance;
         }
 
-        /**
-         * Getter for the client's account number.
-         *
-         * @return Returns the account number of the client.
-         */
         public int getAccountNumber() {
             return accountNumber;
         }
 
-        /**
-         * Getter for the client's balance.
-         *
-         * @return Returns the balance of the client's account.
-         */
         public double getBalance() {
             return balance;
         }
     }
 
-    /**
-     * Constructor to initialize the ATM simulation.
-     */
-    public ATM() {
-        isAvailable = true;
-        clientQueue = new LinkedList<>();
-    }
+    public ATM(int numATMs) {
+        isAvailable = new boolean[numATMs];
 
-    /**
-     * Checks whether the ATM is available or on hold.
-     *
-     * @return Returns true if the ATM is available, false otherwise.
-     */
-    public boolean isATMAvailable() {
-        return isAvailable;
-    }
-
-    /**
-     * Adds a client to the client queue.
-     *
-     * @param accountNumber The account number of the client.
-     * @param balance The balance of the client's account.
-     */
-    public void addClientToQueue(int accountNumber, double balance) {
-        Client client = new Client(accountNumber, balance);
-        clientQueue.add(client);
-        System.out.println("Client with account number " + accountNumber + " added to the queue.");
-    }
-
-    /**
-     * Processes the next client in the queue by performing a transaction.
-     *
-     * @param transactionType The type of transaction to perform (withdrawal, deposit, or check balance).
-     * @param amount The amount to withdraw or deposit. Ignored for check balance transactions.
-     * @return Returns true if the transaction is successful, false otherwise.
-     */
-    public boolean processNextClient(TransactionType transactionType, double amount) {
-        if (!isAvailable) {
-            System.out.println("ATM is currently on hold. Please wait for your turn.");
-            return false;
+        // Initialize all ATMs as available
+        for (int i = 0; i < numATMs; i++) {
+            isAvailable[i] = true;
         }
-
-        if (clientQueue.isEmpty()) {
-            System.out.println("No clients in the queue.");
-            return false;
-        }
-
-        Client client = clientQueue.poll();
-        System.out.println("Processing client with account number " + client.getAccountNumber());
-
-        switch (transactionType) {
-            case WITHDRAWAL:
-                if (client.getBalance() >= amount) {
-                    client.balance -= amount;
-                    System.out.println("Withdrawal of " + amount + " successful. New balance: " + client.getBalance());
-                    return true;
-                } else {
-                    System.out.println("Insufficient balance for withdrawal. Balance: " + client.getBalance());
-                    return false;
-                }
-            case DEPOSIT:
-                client.balance += amount;
-                System.out.println("Deposit of " + amount + " successful. New balance: " + client.getBalance());
-                return true;
-            case CHECK_BALANCE:
-                System.out.println("Balance for account number " + client.getAccountNumber() + ": " + client.getBalance());
-                return true;
-            default:
-                System.out.println("Invalid transaction type.");
-                return false;
+        
+        atmQueues = new ArrayList<>();
+        
+        // Create a unique queue for each ATM
+        for (int i = 0; i < numATMs; i++) {
+            atmQueues.add(new ArrayList<>());
         }
     }
 
-    /**
-     * Clears the client queue when a VIP person arrives to use the ATM.
-     */
-    public void clearQueueForVIP() {
-        clientQueue.clear();
-        System.out.println("Queue cleared for VIP person.");
+    public boolean isATMAvailable(int atmIndex) {
+        return isAvailable[atmIndex];
     }
 
-    /**
-     * Enum representing the types of transactions that can be performed.
-     */
+    public void addClientToQueue(int atmIndex, int accountNumber, double balance) {
+        // Check if the ATM index is valid
+        if (atmIndex >= 0 && atmIndex < atmQueues.size()) {
+            List<Client> queue = atmQueues.get(atmIndex);
+            Client client = new Client(accountNumber, balance);
+
+            // Add the client to the queue of the specified ATM
+            queue.add(client);
+            System.out.println("Client with account number " + accountNumber + " added to the queue of ATM ");
+
+        } else {
+            System.out.println("Invalid ATM index.");
+        }
+    }
+
+    public boolean processNextClient(int atmIndex, TransactionType transactionType, double amount) {
+        
+         // Check if the ATM index is valid
+         if (atmIndex >= 0 && atmIndex < atmQueues.size()) {
+             List<Client> queue = atmQueues.get(atmIndex);
+             
+             // Check if the ATM is currently available
+             if (!isAvailable[atmIndex]) {
+                 System.out.println("ATM " + (atmIndex + 1) + " is currently on hold. Please wait for your turn.");
+                 return false;
+             }
+             
+             // Check if there are clients in the queue
+             if (queue.isEmpty()) {
+                 System.out.println("No clients in the queue of ATM ");
+                 return false;
+             }
+             
+             // Get the next client from the queue
+             Client client = queue.get(0);
+             
+             System.out.println("Processing client with account number " + client.getAccountNumber());
+ 
+             switch (transactionType) {
+                 case WITHDRAWAL:
+                     if (client.getBalance() >= amount) {
+                         // Perform withdrawal transaction
+                         client.balance -= amount;
+                         System.out.println("Withdrawal of " + amount + " successful. New balance: " + client.getBalance());
+                         return true;
+                     } else {
+                         System.out.println("Insufficient balance for withdrawal. Balance: " + client.getBalance());
+                         return false;
+                     }
+                 case DEPOSIT:
+                     // Perform deposit transaction
+                     client.balance += amount;
+                     System.out.println("Deposit of " + amount + " successful. New balance: " + client.getBalance());
+                     return true;
+                 case CHECK_BALANCE:
+                     // Perform balance inquiry transaction
+                     System.out.println("Balance for account number " + client.getAccountNumber() + ": " + client.getBalance());
+                     return true;
+                 default:
+                     System.out.println("Invalid transaction type.");
+                     return false;
+             }
+         } else {
+             System.out.println("Invalid ATM index.");
+             return false;
+         }
+    }
+
+    public void clearQueueForVIP(int atmIndex) {
+        
+         // Check if the ATM index is valid
+         if (atmIndex >= 0 && atmIndex < atmQueues.size()) {
+             List<Client> queue = atmQueues.get(atmIndex);
+             
+             // Clear the entire queue of the specified ATM
+             queue.clear();
+             
+             System.out.println("Queue of ATM " + (atmIndex + 4) + " cleared for VIP person.");
+         } else {
+             System.out.println("Invalid ATM index.");
+         }
+    }
+
     public enum TransactionType {
         WITHDRAWAL,
         DEPOSIT,
         CHECK_BALANCE
     }
 
-    /**
-     * Main method to demonstrate the ATM simulation.
-     */
     public static void main(String[] args) {
-        ATM atm = new ATM();
+        ATM ATM1 = new ATM(3);
+        ATM ATM2 = new ATM(3);
+        ATM ATM3 = new ATM(3);
+        ATM ATM4 = new ATM(3);
 
-        // Add clients to the queue
-        atm.addClientToQueue(123456, 1000.0);
-        atm.addClientToQueue(789012, 500.0);
-        atm.addClientToQueue(345678, 2000.0);
-        atm.addClientToQueue(901234, 1500.0);
-        atm.addClientToQueue(567890, 3000.0);
+        // Add clients to the queues of each ATM
+        ATM1.addClientToQueue(0, 123456, 6000.0);
+        ATM1.addClientToQueue(1, 557214, 6000.0);
+        ATM1.addClientToQueue(2, 875583, 6000.0);
 
-        // Process transactions for 5 clients
-        for (int i = 0; i < 3; i++) {
-            System.out.println("ATM " + (i + 1));
-            atm.processNextClient(TransactionType.WITHDRAWAL, 200.0);
-            System.out.println();
-            System.out.println("ATM " + (i + 2));
-            atm.processNextClient(TransactionType.DEPOSIT, 100.0);
-            System.out.println();
-            System.out.println("ATM " + (i + 3));
-            atm.processNextClient(TransactionType.CHECK_BALANCE, 0.0);
-            System.out.println();
-        }
 
-        // Clear the queue for VIP person
+        ATM2.addClientToQueue(0, 789012, 6000.0);
+        ATM3.addClientToQueue(0, 345678, 6000.0);
+        ATM4.addClientToQueue(0, 901234, 6000.0);
+        
+
+        // Process transactions for each ATM
+        System.out.println("ATM 1");
+        ATM1.processNextClient(0, TransactionType.WITHDRAWAL, generateRandomNumber());
         System.out.println();
-        atm.clearQueueForVIP();
+        
+        System.out.println("ATM 2");
+        ATM2.processNextClient(0, TransactionType.DEPOSIT, generateRandomNumber());
+        System.out.println();
+        
+        System.out.println("ATM 3");
+        ATM3.processNextClient(0, TransactionType.CHECK_BALANCE, 0.0);
+        System.out.println();
+
+        System.out.println("ATM 4");
+        ATM4.processNextClient(0, TransactionType.CHECK_BALANCE, 0.0);
+        System.out.println();
+
+        System.out.println("ATM 4");
+        ATM4.clearQueueForVIP(0);
+        System.out.println();
+
+
+        System.out.println();
+        System.out.println();
+        System.out.println("/////// SECOND PHASE /////////");
+
+        System.out.println("ATM 1");
+        ATM1.processNextClient(1, TransactionType.WITHDRAWAL, generateRandomNumber());
+        System.out.println();
+        
+        System.out.println("ATM 2");
+        ATM2.processNextClient(0, TransactionType.DEPOSIT, generateRandomNumber());
+        System.out.println();
+        
+        System.out.println("ATM 3");
+        ATM3.processNextClient(0, TransactionType.CHECK_BALANCE, 0.0);
+        System.out.println();
+
+        System.out.println("ATM 4");
+        ATM4.processNextClient(0, TransactionType.CHECK_BALANCE, 0.0);
+        System.out.println();
+    }
+
+    private static int generateRandomNumber() {
+        int min = 50;
+        int max = 6000;
+
+        Random random = new Random();
+        
+         // Generate a random number between min and max (inclusive)
+         int randomNum = random.nextInt((max - min) + 1) + min;
+
+         // Set the ones place to 0
+         randomNum -= randomNum % 100;
+
+         // Set the tens place to either 0 or 5
+         int tensDigit = randomNum % 1000 / 100;
+         
+          if (tensDigit != 0 && tensDigit != 5) {
+              int offset = random.nextInt(2) * 5;
+              randomNum -= tensDigit * 100;
+              randomNum += offset * 10;
+          }
+          
+          return randomNum;
     }
 }
