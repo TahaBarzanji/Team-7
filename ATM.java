@@ -25,7 +25,8 @@ public class ATM {
             return balance;
         }
     }
-
+   
+    //Constructor to initialize the ATM with the specified number of ATM slots.
     public ATM(int numATMs) {
         isAvailable = new boolean[numATMs];
 
