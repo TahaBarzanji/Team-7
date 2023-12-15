@@ -15,7 +15,6 @@ public class Security {
     }
 
     /*
-     * Getter for the alarm status.
      * @return Returns the current alarm status.
      */
     public boolean isAlarmActive() {
