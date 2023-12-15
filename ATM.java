@@ -42,10 +42,6 @@ public class ATM {
         }
     }
 
-    public boolean isATMAvailable(int atmIndex) {
-        return isAvailable[atmIndex];
-    }
-
     public void addClientToQueue(int atmIndex, int accountNumber, double balance) {
         // Check if the ATM index is valid
         if (atmIndex >= 0 && atmIndex < atmQueues.size()) {
@@ -69,7 +65,7 @@ public class ATM {
              
              // Check if the ATM is currently available
              if (!isAvailable[atmIndex]) {
-                 System.out.println("ATM " + (atmIndex + 1) + " is currently on hold. Please wait for your turn.");
+                 System.out.println("ATM " + (atmIndex) + " is currently on hold. Please wait for your turn.");
                  return false;
              }
              
@@ -156,7 +152,7 @@ public class ATM {
         System.out.println("ATM 1");
         ATM1.processNextClient(0, TransactionType.WITHDRAWAL, generateRandomNumber());
         System.out.println();
-        
+
         System.out.println("ATM 2");
         ATM2.processNextClient(0, TransactionType.DEPOSIT, generateRandomNumber());
         System.out.println();
